@@ -27,12 +27,12 @@ public class panel3 : PanelBase
 
     public override void Refresh()
     {
-        base.Refresh();
+        Log.Warning("111");
     }
 
-    public override void Show()
+    public override void Initialize()
     {
-        base.Show();
+        base.Initialize();
     }
 
     public override string ToString()

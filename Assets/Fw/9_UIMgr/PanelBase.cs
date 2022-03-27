@@ -85,8 +85,9 @@ namespace FW
         protected virtual void OnValueChanged(string _widgetName) { }
         protected virtual void OnToggleChanged(string _widgetName, bool isSel) { }
 
-        public virtual void Show() { }
+        public virtual void Initialize() { }
         public virtual void Refresh() { }
         public virtual void Hied() { }
+        public virtual void OnDestroy() { }
     }
 }

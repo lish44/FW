@@ -9,18 +9,18 @@ namespace FW
     public class ScenesMgr : SingletonBase<ScenesMgr>
     {
 
-        public void LoadScene(string _sceneName, UnityAction _callback)
+        public void LoadScene(string _sceneName, CallBack _callback)
         {
             SceneManager.LoadScene(_sceneName);
             _callback();
         }
 
-        public void LoadSceneAsyn(string _sceneName, UnityAction _callback)
+        public void LoadSceneAsyn(string _sceneName, CallBack _callback)
         {
             MonoMgr.Ins.StartCoroutine(ReallyLoadSceneAsyn(_sceneName, _callback));
         }
 
-        private IEnumerator ReallyLoadSceneAsyn(string _sceneName, UnityAction _callback)
+        private IEnumerator ReallyLoadSceneAsyn(string _sceneName, CallBack _callback)
         {
             AsyncOperation ao = SceneManager.LoadSceneAsync(_sceneName);
             //更新进度条

@@ -21,7 +21,11 @@ namespace FW
 
         public override void Init()
         {
+        }
+        public void Init(CallBack _callback = null)
+        {
             MonoMgr.Ins.AddUpdateListener(Update);
+            _callback?.Invoke();
         }
 
         void Update()

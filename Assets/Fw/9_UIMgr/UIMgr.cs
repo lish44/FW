@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace FW
 {
@@ -19,10 +20,20 @@ namespace FW
         public RectTransform m_mainCanvas;
         public override void Init()
         {
-            base.Init();
-            var go = FW.ResMgr.Ins.Load<GameObject>("MainCanvas");
-            m_mainCanvas = go.transform as RectTransform;
-            GameObject.DontDestroyOnLoad(go);
+        }
+        public void Init(CallBack _callback = null)
+        {
+            GameObject g = GameObject.Find("MainCanvas");
+            if (g != null) GameObject.Destroy(g);
+            g = FW.ResMgr.Ins.Load<GameObject>("MainCanvas");
+            var _cs = g.GetComponent<CanvasScaler>();
+            if (_cs == null)
+                _cs = g.AddComponent<CanvasScaler>();
+            _cs.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
+            _cs.referenceResolution = new Vector2(1281, 720);
+            g.GetComponent<Canvas>().worldCamera = Camera.main;
+            m_mainCanvas = g.transform as RectTransform;
+            GameObject.DontDestroyOnLoad(g);
 
             //找层级
             m_bot = m_mainCanvas.Find("Bot");
@@ -30,13 +41,11 @@ namespace FW
             m_top = m_mainCanvas.Find("Top");
             m_system = m_mainCanvas.Find("System");
 
-            go = FW.ResMgr.Ins.Load<GameObject>("EventSystem");
-            GameObject.DontDestroyOnLoad(go);
+            g = FW.ResMgr.Ins.Load<GameObject>("EventSystem");
+            GameObject.DontDestroyOnLoad(g);
+            _callback?.Invoke();
         }
 
-        public UIMgr()
-        {
-        }
 
         public void OpenPanel<T>(string _panelName = "", E_UI_layer _layer = E_UI_layer.Mid, UnityAction<T> _callback = null) where T : PanelBase
         {
@@ -84,7 +93,8 @@ namespace FW
                 if (_callback != null)
                     _callback(panel);
 
-                panel.Show();
+                panel.Initialize();
+                panel.Refresh();
                 if (!m_allPanelDic.ContainsKey(_panelName))
                     m_allPanelDic.Add(_panelName, panel);
 
@@ -110,6 +120,7 @@ namespace FW
 
         public void HiedPanel(string _panelName)
         {
+
             if (!m_hiedPanelDic.ContainsKey(_panelName) && m_allPanelDic.ContainsKey(_panelName))
             {
                 m_hiedPanelDic.Add(_panelName, m_allPanelDic[_panelName]);

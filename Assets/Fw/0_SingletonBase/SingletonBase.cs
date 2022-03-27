@@ -5,7 +5,6 @@
 public class SingletonBase<T> where T : SingletonBase<T>, new()
 {
     private static T instance;
-    public bool IsFinish;
     public static T Ins
     {
         get

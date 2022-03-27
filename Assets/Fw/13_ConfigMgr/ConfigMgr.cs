@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using FW;
 
 public delegate void ConfigDataCallBack(long id, string fieldname, ref string data);
 
@@ -63,6 +65,29 @@ public class ConfigMgr
             return _instance;
         }
     }
+    public void Import()
+    {
+        string _path = Application.dataPath + "/Resources/Config";
+        string[] _allPath = Directory.GetFiles(_path, "*.txt", SearchOption.AllDirectories);
+
+        Assembly ass = Assembly.GetExecutingAssembly();
+
+        //string _rpath = _allPath[i].Replace('\\', '/').Replace(".txt", "").Replace(Application.dataPath + "/Resources","");
+
+        for (int i = 0; i < _allPath.Length; i++)
+        {
+            var _name = Path.GetFileNameWithoutExtension(_allPath[i]);
+            var t = Resources.Load("Config/" + _name) as TextAsset;
+            Type _configTypeClassName = ass.GetType(_name, false, false);
+            ConfigMgr.Ins.ImportStrInfo(_configTypeClassName, t.text);
+        }
+    }
+    public void Init(CallBack _callback = null)
+    {
+        Import();
+        _callback?.Invoke();
+    }
+
 
     /// <summary>
     /// 获取配置表集合(泛型)

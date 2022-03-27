@@ -11,7 +11,11 @@ namespace FW
 
         public override void Init()
         {
+        }
+        public void Init(CallBack _callback = null)
+        {
             InitData();
+            _callback?.Invoke();
         }
         public void InitData()
         {

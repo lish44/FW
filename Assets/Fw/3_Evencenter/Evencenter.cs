@@ -17,6 +17,11 @@ namespace FW
         {
             m_eventDic = new Dictionary<EventName, IEventInfo>();
         }
+        public void Init(CallBack _callback = null)
+        {
+            _callback?.Invoke();
+        }
+
 
         /// <summary>
         /// 注册监听函数

@@ -13,7 +13,11 @@ namespace FW
 
         public override void Init()
         {
+        }
+        public void Init(CallBack _callback = null)
+        {
             m_poolDic = new Dictionary<string, PoolData>();
+            _callback?.Invoke();
         }
 
         /// <summary>

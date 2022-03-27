@@ -8,7 +8,9 @@ public class NewBehaviourScript : MonoBehaviour
 {
     void Start()
     {
-        UIMgr.Ins.OpenPanel<panel>("panel");
-        FResourcesManager.Inst.Init();
+        TimeMgr.AddTimer(1, () => { Log.Debug(123.ToString()); }, false);
+        // UIMgr.Ins.OpenPanel<panel>("panel");
+        // FResourcesManager.Inst.Init();
+        UIMgr.Ins.OpenPanel<panel>();
     }
 }

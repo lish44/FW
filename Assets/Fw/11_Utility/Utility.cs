@@ -2,8 +2,8 @@
 using System.Linq;
 using LitJson;
 using UnityEngine;
-using  FW;
-using  System;
+using FW;
+using System;
 
 /// <summary>
 /// 通用工具类
@@ -212,7 +212,41 @@ namespace FW
         //    return array != null && array.Length > 0;
         //}
 
-        
+        public struct CreateOperation
+        {
+            /// <summary>
+            /// 创建基础UIGameObject
+            /// 包含组件[RectTransform]
+            /// </summary>
+            public static GameObject CreatePrefab_UIBase(Transform parent = null,
+                                                            float x = 0, float y = 0, float w = 0, float h = 0,
+                                                            float anchorsMinX = 0, float anchorsMinY = 0,
+                                                            float anchorsMaxX = 1f, float anchorsMaxY = 1f,
+                                                            float pivotX = 0.5f, float pivotY = 0.5f)
+            {
+                GameObject _base = new GameObject();
+                _base.layer = 5;
+
+                if (parent != null)
+                {
+                    _base.transform.SetParent(parent, false);
+                }
+
+                RectTransform rt = _base.AddComponent<RectTransform>();
+
+                rt.pivot = new Vector2(pivotX, pivotY);
+                rt.anchorMin = new Vector2(anchorsMinX, anchorsMinY);
+                rt.anchorMax = new Vector2(anchorsMaxX, anchorsMaxY);
+
+                rt.localPosition = new Vector3(x, y);
+                rt.anchoredPosition = new Vector2(x, y);
+                rt.sizeDelta = new Vector2(w, h);
+
+                return _base;
+            }
+        }
+
+
 
     }
 }

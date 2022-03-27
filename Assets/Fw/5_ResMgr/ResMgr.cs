@@ -28,7 +28,8 @@ namespace FW
             return _res;
         }
 
-        public override void Init()
+
+        public void Init(CallBack _callback)
         {
             mCallback = (t) =>
             {
@@ -39,7 +40,8 @@ namespace FW
                 if (t.Name.Equals("AudioPath"))
                     LoadPath<AudioPath>("AudioClip", new string[] { "Assets/Resources/Audio" });
             };
-            IsFinish = true;
+            _callback?.Invoke();
+
         }
 
         /// <summary>

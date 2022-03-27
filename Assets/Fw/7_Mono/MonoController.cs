@@ -3,51 +3,62 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace FW {
-    public class MonoController : MonoBehaviour {
+namespace FW
+{
+    public class MonoController : MonoBehaviour
+    {
 
-        private event UnityAction m_AwakeEvent;
-        private event UnityAction m_startEvent;
-        private event UnityAction m_updateEvent;
+        private event CallBack m_AwakeEvent;
+        private event CallBack m_startEvent;
+        private event CallBack m_updateEvent;
 
-        private void Awake () {
-            DontDestroyOnLoad (this.gameObject);
+        private void Awake()
+        {
+            DontDestroyOnLoad(this.gameObject);
             if (m_AwakeEvent != null)
-                m_AwakeEvent ();
+                m_AwakeEvent();
         }
 
-        private void Start () {
+        private void Start()
+        {
             // DontDestroyOnLoad (this.gameObject);
             if (m_startEvent != null)
-                m_startEvent ();
+                m_startEvent();
         }
 
-        private void Update () {
+        private void Update()
+        {
             if (m_updateEvent != null)
-                m_updateEvent ();
+                m_updateEvent();
         }
 
-        public void AddUpdateListener (UnityAction _action) {
+        public void AddUpdateListener(CallBack _action)
+        {
             m_updateEvent += _action;
         }
 
-        public void RemoveUpdateListener (UnityAction _action) {
+        public void RemoveUpdateListener(CallBack _action)
+        {
             m_updateEvent -= _action;
         }
 
-        public void AddStartListener (UnityAction _action) {
+        public void AddStartListener(CallBack _action)
+        {
             m_startEvent += _action;
         }
 
-        public void RemoveStartListener (UnityAction _action) {
+        public void RemoveStartListener(CallBack _action)
+        {
             m_startEvent -= _action;
         }
 
-        public void AddAwakeListener (UnityAction _action) {
+        public void AddAwakeListener(CallBack _action)
+        {
             m_AwakeEvent += _action;
         }
 
-        public void RemoveAwakeListener (UnityAction _action) {
+        public void RemoveAwakeListener(CallBack _action)
+        {
             m_AwakeEvent -= _action;
         }
     }
