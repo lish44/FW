@@ -30,7 +30,7 @@ namespace FW
             if (_cs == null)
                 _cs = g.AddComponent<CanvasScaler>();
             _cs.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
-            _cs.referenceResolution = new Vector2(1281, 720);
+            _cs.referenceResolution = new Vector2(1280, 720);
             g.GetComponent<Canvas>().worldCamera = Camera.main;
             m_mainCanvas = g.transform as RectTransform;
             GameObject.DontDestroyOnLoad(g);
@@ -47,9 +47,9 @@ namespace FW
         }
 
 
-        public void OpenPanel<T>(string _panelName = "", E_UI_layer _layer = E_UI_layer.Mid, UnityAction<T> _callback = null) where T : PanelBase
+        public void OpenPanel<T>(E_UI_layer _layer = E_UI_layer.Mid, UnityAction<T> _callback = null) where T : PanelBase
         {
-            if (_panelName == "") _panelName = typeof(T).Name;
+            string _panelName = typeof(T).Name;
             // 先去隐藏的dic里找
             if (m_hiedPanelDic.ContainsKey(_panelName) && !m_hiedPanelDic[_panelName].gameObject.activeInHierarchy)
             {
@@ -71,32 +71,31 @@ namespace FW
             FW.ResMgr.Ins.LoadAsync<GameObject>(_panelName, (go) =>
             {
                 //作为canvas子对象
-                Transform father = m_bot;
+                Transform _father = m_bot;
                 switch (_layer)
                 {
                     case E_UI_layer.Mid:
-                        father = m_mid;
+                        _father = m_mid;
                         break;
                     case E_UI_layer.Top:
-                        father = m_top;
+                        _father = m_top;
                         break;
                     case E_UI_layer.System:
-                        father = m_system;
+                        _father = m_system;
                         break;
                 }
 
-                FW.Utility.TransformOperation.SetParent(go.transform, father);
+                FW.Utility.TransformOperation.SetParent(go.transform, _father);
 
                 // 得到面板身上的脚本
-                T panel = go.GetComponent<T>();
+                T _panel = go.GetComponent<T>();
+                if (_panel == null) go.AddComponent<T>();
                 // 处理面板创建完成后的逻辑 因为异步加载至少要等一帧
-                if (_callback != null)
-                    _callback(panel);
-
-                panel.Initialize();
-                panel.Refresh();
+                _callback?.Invoke(_panel);
+                _panel.Initialize();
+                _panel.Refresh();
                 if (!m_allPanelDic.ContainsKey(_panelName))
-                    m_allPanelDic.Add(_panelName, panel);
+                    m_allPanelDic.Add(_panelName, _panel);
 
             });
         }
@@ -104,8 +103,10 @@ namespace FW
         /// <summary>
         /// 删面板
         /// </summary>
-        public void ClosePanel(string _panelName)
+        public void ClosePanel<T>() where T : PanelBase
         {
+
+            string _panelName = typeof(T).Name;
             if (m_allPanelDic.ContainsKey(_panelName))
             {
                 m_allPanelDic[_panelName].Hied(); // 面板删除前一些保存工作
@@ -118,9 +119,9 @@ namespace FW
             }
         }
 
-        public void HiedPanel(string _panelName)
+        public void HiedPanel<T>() where T : PanelBase
         {
-
+            string _panelName = typeof(T).Name;
             if (!m_hiedPanelDic.ContainsKey(_panelName) && m_allPanelDic.ContainsKey(_panelName))
             {
                 m_hiedPanelDic.Add(_panelName, m_allPanelDic[_panelName]);
@@ -132,8 +133,9 @@ namespace FW
         /// <summary>
         /// 得到一个面板脚本
         /// </summary>
-        public T GetPanel<T>(string _panelName) where T : PanelBase
+        public T GetPanel<T>() where T : PanelBase
         {
+            string _panelName = typeof(T).Name;
             if (m_allPanelDic.ContainsKey(_panelName))
                 return m_allPanelDic[_panelName] as T;
             return null;

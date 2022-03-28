@@ -5,7 +5,6 @@ using FW;
 using System;
 using System.Reflection;
 using System.IO;
-
 public class Launch : SingletonMono<Launch>, IGetTime
 {
     [SerializeField]
@@ -35,26 +34,8 @@ public class Launch : SingletonMono<Launch>, IGetTime
     }
     private void Start()
     {
-
-        FResourcesManager.Inst.Init();
-        FW.Evencenter.Ins.AddEventListener<KeyCode>(EventName.KEY_DOWN, KeyDown);
         InputMgr.Ins.StartOrEndCheck(true);
-
-
-        // ScenesMgr.Ins.LoadSceneAsyn("", () =>
-        // {
-
-        // });
-    }
-
-    void KeyDown(KeyCode key)
-    {
-        switch (key)
-        {
-            case KeyCode.W:
-                Log.Warning(1.ToString());
-                break;
-        }
+        FResourcesManager.Inst.Init();
     }
     public void AddManager(object obj)
     {
