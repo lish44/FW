@@ -59,7 +59,6 @@ namespace FW
         private string Get<T>(string _name) where T : IGetPath
         {
             Type _t = typeof(T);
-            // 注入
             if (!map.ContainsKey(_t)) mCallback?.Invoke(_t);
             return map[typeof(T)][_name].GetPath;
         }

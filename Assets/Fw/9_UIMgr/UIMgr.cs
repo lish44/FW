@@ -89,7 +89,7 @@ namespace FW
 
                 // 得到面板身上的脚本
                 T _panel = go.GetComponent<T>();
-                if (_panel == null) go.AddComponent<T>();
+                if (_panel == null) _panel = go.AddComponent<T>();
                 // 处理面板创建完成后的逻辑 因为异步加载至少要等一帧
                 _callback?.Invoke(_panel);
                 _panel.Initialize();
